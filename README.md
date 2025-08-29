@@ -1,0 +1,31 @@
+name: Run Maven Build
+
+on:
+  push:       # Runs when you push to repo
+  pull_request:  # Runs when a PR is created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+      security-events: write
+      actions: read
+      checks: write
+      issues: write
+      dependency-graph: write  
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'   # can change to 8, 11, 21 depending on project
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
